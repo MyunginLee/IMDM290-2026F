@@ -62,7 +62,9 @@ public class AudioReactive : MonoBehaviour
         // Measure Time 
         // Time.deltaTime = The interval in seconds from the last frame to the current one
         // but what if time flows according to the music's amplitude?
-        time += Time.deltaTime * AudioSpectrum.audioAmp; 
+        //time += Time.deltaTime * AudioSpectrum.audioAmp;
+        time += Time.deltaTime * AudioSpectrum.audioAmp;
+        Debug.Log(AudioSpectrum.audioAmp);
         // what to update over time?
         for (int i =0; i < numSphere; i++){
             // Lerp : Linearly interpolates between two points.
