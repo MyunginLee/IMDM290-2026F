@@ -10,7 +10,7 @@ using UnityEngine;
 public class AudioSpectrum : MonoBehaviour
 {
     AudioSource source;
-    public static int FFTSIZE = 1024; // https://en.wikipedia.org/wiki/Fast_Fourier_transform
+    public static int FFTSIZE = 4096; // https://en.wikipedia.org/wiki/Fast_Fourier_transform
     public static float[] samples = new float[FFTSIZE];
     public static float audioAmp = 0f;
     void Start()
