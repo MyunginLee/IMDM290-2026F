@@ -5,6 +5,7 @@ public class CameraMotionFireDemo : MonoBehaviour
 {
     private const string VectorScatterShaderName = "IMDM290/VectorScatterFlare";
     private const string SoftParticleShaderName = "IMDM290/SoftAdditiveParticle";
+    private const int CurrentSerializedDataVersion = 1;
 
     [Header("Camera Input")]
     [SerializeField] private Camera targetCamera;
@@ -73,6 +74,7 @@ public class CameraMotionFireDemo : MonoBehaviour
     [SerializeField, Range(0.1f, 1f)] private float debugTextureAlpha = 1f;
     [SerializeField, Range(0f, 1f)] private float frameDelta;
     [SerializeField, Range(0f, 1f)] private float smoothedDelta;
+    [SerializeField, HideInInspector] private int serializedDataVersion = CurrentSerializedDataVersion;
 
     private WebCamTexture webCamTexture;
     private Color32[] webCamPixels;
@@ -98,6 +100,11 @@ public class CameraMotionFireDemo : MonoBehaviour
     private Color[] deltaDebugPixels;
     private bool hasPreviousFrame;
     private bool hasBackgroundFrame;
+
+    private void Awake()
+    {
+        UpgradeSerializedDataIfNeeded();
+    }
 
     private void Start()
     {
@@ -163,6 +170,11 @@ public class CameraMotionFireDemo : MonoBehaviour
         {
             Destroy(deltaDebugTexture);
         }
+    }
+
+    private void OnValidate()
+    {
+        UpgradeSerializedDataIfNeeded();
     }
 
     private void OnGUI()
@@ -774,5 +786,51 @@ public class CameraMotionFireDemo : MonoBehaviour
         {
             material.SetFloat("_Intensity", intensity);
         }
+    }
+
+    private void UpgradeSerializedDataIfNeeded()
+    {
+        if (serializedDataVersion >= CurrentSerializedDataVersion)
+        {
+            return;
+        }
+
+        silhouetteThreshold = 0.08f;
+        silhouetteGain = 14f;
+        backgroundAdaptSpeed = 0.6f;
+        edgeUpwardBias = 0.9f;
+
+        fireDensityBoost = 1.8f;
+        motionVectorGain = 12f;
+        vectorPersistence = 0.92f;
+        fireRandomness = 0.35f;
+        firePositionJitter = 0.03f;
+        firePulseSpeed = 5f;
+        fireEmissionJitter = 0.45f;
+        deltaFireBoost = 2.4f;
+        deltaImmediateBurst = 12f;
+        deltaSpawnThreshold = 0.08f;
+        deltaVelocityBoost = 2.8f;
+        deltaLifetimeFactor = 0.35f;
+
+        totalAmplitudeSpawnBoost = 2.4f;
+        totalAmplitudeThresholdReduction = 0.035f;
+        amplitudeSpawnProbability = 0.85f;
+        amplitudeIntensityBoost = 1.6f;
+        bassEmissionBoost = 2.2f;
+        bassLifetimeBoost = 1.4f;
+        midSizeBoost = 0.9f;
+        trebleSpeedBoost = 1.15f;
+        audioBrightnessBoost = 0.85f;
+        frequencyHueMin = 0.02f;
+        frequencyHueMax = 0.72f;
+        liveBandBrightnessBoost = 3.8f;
+        maxReactiveLifetime = 0.2f;
+
+        showDeltaTexture = true;
+        debugTextureWidth = 240f;
+        debugTextureAlpha = 1f;
+
+        serializedDataVersion = CurrentSerializedDataVersion;
     }
 }
